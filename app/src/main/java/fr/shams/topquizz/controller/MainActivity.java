@@ -1,9 +1,10 @@
-package fr.shams.topquizz;
+package fr.shams.topquizz.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 /*
 On importe les classes de nos différents widgets pour pouvoir les référencer
  */
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import fr.shams.topquizz.R;
+import fr.shams.topquizz.model.model.model.User;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -19,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mGreetingTextView;
     private EditText mNameEditText;
     private Button mPlayButton;
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // L'utilisateur à cliqué
+                //On enregistre le prénom de l'utilisateur
+                //On lance la seconde page qui contient l'activité de l'application
+                mUser.setFirstName(mNameEditText.getText().toString());
+                Intent gameActivityIntent = new Intent(MainActivity.this, GameActivity.class);
+                startActivity(gameActivityIntent);
             }
         });
 
