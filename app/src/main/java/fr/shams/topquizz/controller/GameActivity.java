@@ -1,10 +1,14 @@
 package fr.shams.topquizz.controller;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 
@@ -12,7 +16,7 @@ import fr.shams.topquizz.R;
 import fr.shams.topquizz.model.model.model.Question;
 import fr.shams.topquizz.model.model.model.QuestionBank;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView mTextQuestion;
     private Button mButtonAnswerUn;
@@ -20,6 +24,9 @@ public class GameActivity extends AppCompatActivity {
     private Button mButtonAnswerTrois;
     private Button mButtonAnswerQuatre;
     private QuestionBank mBanqueQuestion = generateQuestions();
+    private int mRemainingQuestionCount;
+    private Question mCurrentQuestion;
+    private int mScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +41,26 @@ public class GameActivity extends AppCompatActivity {
         mButtonAnswerDeux=findViewById(R.id.game_activity_button_2);
         mButtonAnswerTrois=findViewById(R.id.game_activity_button_3);
         mButtonAnswerQuatre=findViewById(R.id.game_activity_button_4);
+        mRemainingQuestionCount = 3;
+        mScore = 0;
 
+        //Détection de tous les boutons de l'applications
+        mButtonAnswerUn.setOnClickListener(this);
+        mButtonAnswerDeux.setOnClickListener(this);
+        mButtonAnswerTrois.setOnClickListener(this);
+        mButtonAnswerQuatre.setOnClickListener(this);
 
+        //On place la question
+        mCurrentQuestion = mBanqueQuestion.getCurrentQuestion();
+        displayQuestions(mCurrentQuestion);
+        }
+
+    private void displayQuestions(final Question question){
+        mTextQuestion.setText(question.getQuestion());
+        mButtonAnswerUn.setText(question.getChoiceList().get(0));
+        mButtonAnswerDeux.setText(question.getChoiceList().get(1));
+        mButtonAnswerTrois.setText(question.getChoiceList().get(2));
+        mButtonAnswerQuatre.setText(question.getChoiceList().get(3));
     }
 
 
@@ -73,6 +98,52 @@ public class GameActivity extends AppCompatActivity {
         );
 
         return new QuestionBank(Arrays.asList(question1,question2,question3));
+    }
 
+    @Override
+    public void onClick(View view) {
+        int index;
+        if(view == mButtonAnswerUn){
+            index = 0;
+        }
+        else if(view == mButtonAnswerDeux){
+            index = 1;
+        }
+        else if(view == mButtonAnswerTrois){
+            index = 2;
+        }
+        else if(view == mButtonAnswerTrois){
+            index = 3;
+        }
+        else{
+            throw new IllegalStateException("Unknown clicked view : "+ view);
+        }
+        if(index == mBanqueQuestion.getCurrentQuestion().getAnswerIndex()){
+            Toast.makeText(this, "CORRECT", Toast.LENGTH_SHORT).show();
+            mScore ++;
+        }
+        else{
+            Toast.makeText(this, "INCORRECT", Toast.LENGTH_SHORT).show();
+        }
+        mRemainingQuestionCount --;
+        if(mRemainingQuestionCount > 0){
+            mCurrentQuestion = mBanqueQuestion.getNextQuestion();
+            displayQuestions(mCurrentQuestion);
+        }
+        else{
+            //Plus de question, le jeu est fini
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle("Well Done!")
+                .setMessage("Your score is : "+ mScore)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                           finish();
+                        }
+                    })
+                    .create()
+                    .show();
+        }
     }
 }
