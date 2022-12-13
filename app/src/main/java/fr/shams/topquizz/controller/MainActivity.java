@@ -1,11 +1,15 @@
 package fr.shams.topquizz.controller;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 /*
 On importe les classes de nos différents widgets pour pouvoir les référencer
  */
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,7 +26,7 @@ import fr.shams.topquizz.model.model.model.User;
 public class MainActivity extends AppCompatActivity {
 
 
-    //Ajout des trois éléments widgets créés précedemment à l'aide d'attribut de classe
+    //Ajout des trois widgets créés précedemment à l'aide d'attribut de classe
     private TextView mGreetingTextView;
     private EditText mNameEditText;
     private Button mPlayButton;
@@ -30,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private final static int GAME_ACTIVITY_REQUEST_CODE = 42;
     private static final String SHARED_PREF_USER_INFO = "SHARED_PREF_USER_INFO";
     private static final String SHARED_PREF_USER_NAME = "SHARED_PREF_USER_NAME";
-    private static final String SHARED_PREF_USER_SCORE = "SHARED_PREF_USER_SCORE";
+    ActivityResultLauncher<Intent> mIntent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            @SuppressWarnings("deprecation")
             public void onClick(View view) {
                 // L'utilisateur a cliqué
                 //On enregistre le prénom de l'utilisateur
@@ -85,7 +89,9 @@ public class MainActivity extends AppCompatActivity {
 
                 mUser.setFirstName(mNameEditText.getText().toString());
                 Intent gameActivityIntent = new Intent(MainActivity.this, GameActivity.class);
-                startActivityForResult(gameActivityIntent, GAME_ACTIVITY_REQUEST_CODE);
+                //startActivityForResult(gameActivityIntent, GAME_ACTIVITY_REQUEST_CODE);
+                mIntent.launch(gameActivityIntent);
+
 
                 preferences.edit()
                         .putInt(SHARED_PREF_USER_SCORE, mUser.getLastScore())
@@ -94,14 +100,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode,Intent data){
-        super.onActivityResult(requestCode, resultCode, data);
-        if(GAME_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == requestCode){
-            int score = data.getIntExtra(GameActivity.BUNDLE_EXTRA_SCORE,0);
-            mUser.setLastScore(score);
-        }
+    mIntent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if(GAME_ACTIVITY_REQUEST_CODE == result.getResultCode() && RESULT_OK == result.getResultCode()){
+                        int score = result.getData().getIntExtra(GameActivity.BUNDLE_EXTRA_SCORE, 0);
+                    }
+                }
+            });
+
     }
 
 
