@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private final static int GAME_ACTIVITY_REQUEST_CODE = 42;
     private static final String SHARED_PREF_USER_INFO = "SHARED_PREF_USER_INFO";
     private static final String SHARED_PREF_USER_NAME = "SHARED_PREF_USER_NAME";
+    private static final String SHARED_PREF_USER_SCORE = "SHARED_PREF_USER_SCORE";
     ActivityResultLauncher<Intent> mIntent;
 
 
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onActivityResult(ActivityResult result) {
                     if(GAME_ACTIVITY_REQUEST_CODE == result.getResultCode() && RESULT_OK == result.getResultCode()){
                         int score = result.getData().getIntExtra(GameActivity.BUNDLE_EXTRA_SCORE, 0);
+                        mUser.setLastScore(score);
                     }
                 }
             });
