@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SHARED_PREF_USER_NAME = "SHARED_PREF_USER_NAME";
     private static final String SHARED_PREF_USER_SCORE = "SHARED_PREF_USER_SCORE";
     ActivityResultLauncher<Intent> mIntent;
-    private final static String TAG2 = "AUTRE_SHAMS";
+
 
 
     @Override
@@ -112,33 +111,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG2, "onStart() called");
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG2, "onResume() called");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG2, "onPause() called");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG2, "onStop() called");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG2, "onDestroy() called");
-    }
 }

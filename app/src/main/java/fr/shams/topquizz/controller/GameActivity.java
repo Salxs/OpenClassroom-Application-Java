@@ -4,13 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,7 +31,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int mRemainingQuestionCount;
     private Question mCurrentQuestion;
     private int mScore;
-    private final static String TAG = "SHAMS";
+    public static final String BUNDLE_STATE_SCORE = "BUNDLE_STATE_SCORE";
+    public static final String BUNDLE_STATE_QUESTION = "BUNDLE_STATE_QUESTION";
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -58,8 +59,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mButtonAnswerQuatre=findViewById(R.id.game_activity_button_4);
 
         mEnableTouchEvents = true;
-        mRemainingQuestionCount = 3;
-        mScore = 0;
 
         //Détection de tous les boutons de l'applications
         mButtonAnswerUn.setOnClickListener(this);
@@ -70,7 +69,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         //On place la question
         mCurrentQuestion = mBanqueQuestion.getCurrentQuestion();
         displayQuestions(mCurrentQuestion);
+
+        if(savedInstanceState != null){
+            mScore = savedInstanceState.getInt(BUNDLE_STATE_SCORE);
+            mRemainingQuestionCount = savedInstanceState.getInt(BUNDLE_STATE_QUESTION);
         }
+        else{
+            mScore = 0;
+            mRemainingQuestionCount = 3;
+        }
+    }
 
     private void displayQuestions(final Question question){
         mTextQuestion.setText(question.getQuestion());
@@ -179,32 +187,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart() called");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume() called");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause() called");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop() called");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy() called");
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(BUNDLE_STATE_SCORE, mScore);
+        outState.putInt(BUNDLE_STATE_QUESTION, mRemainingQuestionCount);
     }
 }
