@@ -1,15 +1,5 @@
 package fr.shams.topquizz.controller;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-/*
-On importe les classes de nos différents widgets pour pouvoir les référencer
- */
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
 
 import fr.shams.topquizz.R;
 import fr.shams.topquizz.model.model.model.User;
@@ -83,12 +79,11 @@ public class MainActivity extends AppCompatActivity {
                 //On lance la seconde page qui contient l'activité de l'application
 
                 //Permet d'enregistrer les informations de l'utilisateur dans uun fichier XML
+
                 SharedPreferences preferences = getSharedPreferences(SHARED_PREF_USER_INFO, MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(SHARED_PREF_USER_NAME, mUser.getFirstName());
+                editor.putString(SHARED_PREF_USER_NAME, mNameEditText.getText().toString());
                 editor.apply();
-
-                mUser.setFirstName(mNameEditText.getText().toString());
                 Intent gameActivityIntent = new Intent(MainActivity.this, GameActivity.class);
                 //startActivityForResult(gameActivityIntent, GAME_ACTIVITY_REQUEST_CODE);
                 mIntent.launch(gameActivityIntent);
