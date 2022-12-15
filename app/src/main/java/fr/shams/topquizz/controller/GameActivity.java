@@ -3,6 +3,9 @@ package fr.shams.topquizz.controller;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,8 +31,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int mRemainingQuestionCount;
     private Question mCurrentQuestion;
     private int mScore;
+    private final static String TAG = "SHAMS";
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return mEnableTouchEvents && super.dispatchTouchEvent(ev);
+    }
+
     //On crée la clé associé au score du joueur pour le récupérer dans l'activité mainActivity
     public final static String BUNDLE_EXTRA_SCORE = "BUNDLE_EXTRA_SCORE";
+    private boolean mEnableTouchEvents;
 
 
     @Override
@@ -45,6 +56,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         mButtonAnswerDeux=findViewById(R.id.game_activity_button_2);
         mButtonAnswerTrois=findViewById(R.id.game_activity_button_3);
         mButtonAnswerQuatre=findViewById(R.id.game_activity_button_4);
+
+        mEnableTouchEvents = true;
         mRemainingQuestionCount = 3;
         mScore = 0;
 
@@ -129,28 +142,69 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         else{
             Toast.makeText(this, "INCORRECT", Toast.LENGTH_SHORT).show();
         }
-        mRemainingQuestionCount --;
-        if(mRemainingQuestionCount > 0){
-            mCurrentQuestion = mBanqueQuestion.getNextQuestion();
-            displayQuestions(mCurrentQuestion);
-        }
-        else{
-            //Plus de question, le jeu est fini
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        mEnableTouchEvents = false;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mRemainingQuestionCount --;
+                if(mRemainingQuestionCount > 0){
+                    mCurrentQuestion = mBanqueQuestion.getNextQuestion();
+                    displayQuestions(mCurrentQuestion);
+                }
+                else{
+                   endGame();
+                }
+                mEnableTouchEvents = true;
+            }
+        }, 2000);
 
-            builder.setTitle("Well Done!")
+    }
+    private void endGame(){
+        //Plus de question, le jeu est fini
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Well Done!")
                 .setMessage("Your score is : "+ mScore)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener(){
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent intent = new Intent();
-                            intent.putExtra(BUNDLE_EXTRA_SCORE, mScore);
-                            setResult(RESULT_OK, intent);
-                            finish();
-                        }
-                    })
-                    .create()
-                    .show();
-        }
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent();
+                        intent.putExtra(BUNDLE_EXTRA_SCORE, mScore);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart() called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause() called");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
     }
 }
