@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="question_1">Qui est le créateur d\'Android ?</string>
+    <string name="question_2">En quelle année le premier homme a-t-il marché sur la Lune ?</string>
+    <string name="question_3">Quel est le numéro de maison des Simpsons ?</string>
+    <string name="answer_correct">bonne réponse</string>
+    <string name="answer_incorrect">mauvaise réponse</string>
+    <string name="answer_congrats">Bien joué !</string>
+    <string name="answer_score">Votre score est : %d</string>
+    <string name="welcome_back">Bon retour %s! Votre dernier score était %d ferez vous mieux cette fois ?</string>
+</resources>
