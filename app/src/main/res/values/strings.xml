@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">TopQuizz</string>
+    <string name="app_name" translatable="false">TopQuizz</string>
+    <string name="question_1">Who is the creator of Android?</string>
+    <string name="question_1_answer_1" translatable="false">Andy Rubin</string>
+    <string name="question_1_answer_2" translatable="false">Steve Wozniak</string>
+    <string name="question_1_answer_3" translatable="false">Jake Wharton</string>
+    <string name="question_1_answer_4" translatable="false">Paul Smith</string>
+    <string name="question_2">When did the first man land on the moon?</string>
+    <string name="question_2_answer_1" translatable="false">1958</string>
+    <string name="question_2_answer_2" translatable="false">1962</string>
+    <string name="question_2_answer_3" translatable="false">1967</string>
+    <string name="question_2_answer_4" translatable="false">1969</string>
+    <string name="question_3">What is the house of The Simpsons?</string>
+    <string name="question_3_answer_1" translatable="false">42</string>
+    <string name="question_3_answer_2" translatable="false">101</string>
+    <string name="question_3_answer_3" translatable="false">666</string>
+    <string name="question_3_answer_4" translatable="false">742</string>
+    <string name="answer_correct">correct</string>
+    <string name="answer_incorrect">incorrect</string>
+    <string name="answer_congrats">Well Done!</string>
+    <string name="answer_score">Your score is: %d</string>
+    <string name="welcome_back">Welcome Back %s! \\nYour last Score was %d will you do better this time ?</string>
+
 </resources>

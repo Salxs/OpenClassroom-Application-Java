@@ -1,4 +1,4 @@
-package fr.shams.topquizz.model.model.model;
+package fr.shams.topquizz.models;
 
 import java.util.List;
 
